@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sürpriz Yumurta! 🥚</title>
+    <style>
+        /* Arka plan renkli ve ekranı ortalayacak şekilde */
+        body {
+            background-color: #6a1b9a; /* Canlı mor arka plan */
+            color: white;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden; /* Sayfa kaymasın diye */
+        }
+
+        /* Ortadaki Başlangıç Butonu */
+        #basla-btn {
+            background-color: white;
+            color: #6a1b9a;
+            border: none;
+            padding: 15px 30px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Animasyon Alanı (İlk başta gizli) */
+        #sahne {
+            display: none;
+            position: relative;
+            width: 100%;
+            height: 100vh;
+        }
+
+        /* Yukarıdan düşecek olan El ve Yumurta */
+        #yumurta-container {
+            position: absolute;
+            top: -150px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 70px;
+            text-align: center;
+        }
+
+        /* Yumurtanın düşme animasyonu */
+        .dusme-efekti {
+            animation: dusme 1.5s forwards ease-in;
+        }
+
+        @keyframes dusme {
+            0% { top: -150px; }
+            /* El yumurtayı bırakıyor gibi */
+            30% { top: 50px; } 
+            100% { top: 75vh; } /* Yere çakılma noktası */
+        }
+
+        /* Sürpriz Fotoğraf (İlk başta gizli ve küçücük) */
+        #surpriz-foto {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 100%;
+            height: 100vh;
+            object-fit: cover; /* Ekranı tam kaplaması için */
+            z-index: 10;
+            transition: transform 1s ease-out;
+        }
+
+        /* Fotoğrafın büyüyerek ekranı kaplama efekti */
+        .buyume-efekti {
+            transform: translate(-50%, -50%) scale(1) !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. ADIM: Ortadaki tek buton -->
+    <button id="basla-btn" onclick="animasyonuBaslat()">Resmi Gör</button>
+
+    <!-- 2. ADIM: Yumurta düşme sahnesi -->
+    <div id="sahne">
+        <!-- El ve Yumurta yan yana duruyor -->
+        <div id="yumurta-container" id="obje">
+            <span id="el-emojisi">🫳</span><br>
+            <span id="yumurta-emojisi">🥚</span>
+        </div>
+    </div>
+
+    <!-- 3. ADIM: Kırılınca büyüyecek fotoğraf -->
+    <!-- NOT: Alttaki src kısmına kendi fotoğrafının adını veya internetteki linkini yazmalısın -->
+    <img id="surpriz-foto" src="merveemre.jpg" alt="Sürpriz Fotoğraf">
+
+    <script>
+        function animasyonuBaslat() {
+            // Butonu gizle, animasyon sahnesini aç
+            document.getElementById("basla-btn").style.display = "none";
+            const sahne = document.getElementById("sahne");
+            sahne.style.display = "block";
+
+            const container = document.getElementById("yumurta-container");
+            const el = document.getElementById("el-emojisi");
+            const yumurta = document.getElementById("yumurta-emojisi");
+            const foto = document.getElementById("surpriz-foto");
+
+            // Yumurtayı yukarıdan aşağı düşür
+            container.classList.add("dusme-efekti");
+
+            // 0.5 saniye sonra el yukarıda kalsın, yumurta düşmeye devam etsin (ayrılma efekti)
+            setTimeout(() => {
+                el.style.visibility = "hidden";
+            }, 500);
+
+            // 1.5 saniye sonra (yumurta yere çakıldığında)
+            setTimeout(() => {
+                // Yumurtayı kırılmış yumurtaya çevir
+                yumurta.innerText = "🍳";
+                
+                // Yarım saniye kırık halini göster ve hemen fotoğrafı patlat
+                setTimeout(() => {
+                    sahne.style.display = "none"; // Yumurtayı gizle
+                    foto.style.display = "block"; // Fotoğrafı görünür yap
+                    
+                    // Küçük bir gecikmeyle büyütme animasyonunu tetikle
+                    setTimeout(() => {
+                        foto.classList.add("buyume-efekti");
+                    }, 50);
+                }, 400);
+
+            }, 1500);
+        }
+    </script>
+
+</body>
+</html>
